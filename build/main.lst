@@ -1,0 +1,58 @@
+ARM GAS  /tmp/ccpoR3lJ.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m4
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"main.c"
+  15              		.section	.text.startup,"ax",%progbits
+  16              		.align	1
+  17              		.global	main
+  18              		.thumb
+  19              		.thumb_func
+  21              	main:
+  22              		@ args = 0, pretend = 0, frame = 0
+  23              		@ frame_needed = 0, uses_anonymous_args = 0
+  24              		@ link register save eliminated.
+  25 0000 094A     		ldr	r2, .L2
+  26 0002 136B     		ldr	r3, [r2, #48]
+  27 0004 43F00103 		orr	r3, r3, #1
+  28 0008 1363     		str	r3, [r2, #48]
+  29 000a 084B     		ldr	r3, .L2+4
+  30 000c 1A68     		ldr	r2, [r3]
+  31 000e 42F48062 		orr	r2, r2, #1024
+  32 0012 1A60     		str	r2, [r3]
+  33 0014 9A68     		ldr	r2, [r3, #8]
+  34 0016 42F44062 		orr	r2, r2, #3072
+  35 001a 9A60     		str	r2, [r3, #8]
+  36 001c 9A69     		ldr	r2, [r3, #24]
+  37 001e 42F02002 		orr	r2, r2, #32
+  38 0022 9A61     		str	r2, [r3, #24]
+  39 0024 0020     		movs	r0, #0
+  40 0026 7047     		bx	lr
+  41              	.L3:
+  42              		.align	2
+  43              	.L2:
+  44 0028 00380240 		.word	1073887232
+  45 002c 00000240 		.word	1073872896
+  47              		.ident	"GCC: (15:4.9.3+svn231177-1) 4.9.3 20150529 (prerelease)"
+ARM GAS  /tmp/ccpoR3lJ.s 			page 2
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 main.c
+     /tmp/ccpoR3lJ.s:16     .text.startup:0000000000000000 $t
+     /tmp/ccpoR3lJ.s:21     .text.startup:0000000000000000 main
+     /tmp/ccpoR3lJ.s:44     .text.startup:0000000000000028 $d
+
+NO UNDEFINED SYMBOLS

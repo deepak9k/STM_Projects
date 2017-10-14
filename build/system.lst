@@ -1,0 +1,120 @@
+ARM GAS  /tmp/cc2NGvS0.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m4
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"system.c"
+  15              		.text
+  16              		.align	1
+  17              		.global	SystemInit
+  18              		.thumb
+  19              		.thumb_func
+  21              	SystemInit:
+  22              		@ args = 0, pretend = 0, frame = 0
+  23              		@ frame_needed = 0, uses_anonymous_args = 0
+  24              		@ link register save eliminated.
+  25 0000 204A     		ldr	r2, .L17
+  26 0002 136C     		ldr	r3, [r2, #64]
+  27 0004 43F08053 		orr	r3, r3, #268435456
+  28 0008 1364     		str	r3, [r2, #64]
+  29 000a 1F4B     		ldr	r3, .L17+4
+  30 000c 1968     		ldr	r1, [r3]
+  31 000e 41F40041 		orr	r1, r1, #32768
+  32 0012 1960     		str	r1, [r3]
+  33              	.L2:
+  34 0014 1168     		ldr	r1, [r2]
+  35 0016 8907     		lsls	r1, r1, #30
+  36 0018 FCD5     		bpl	.L2
+  37 001a 1A68     		ldr	r2, [r3]
+  38 001c 02F07F42 		and	r2, r2, #-16777216
+  39 0020 1A60     		str	r2, [r3]
+  40              	.L3:
+  41 0022 184B     		ldr	r3, .L17
+  42 0024 1A68     		ldr	r2, [r3]
+  43 0026 9201     		lsls	r2, r2, #6
+  44 0028 FBD4     		bmi	.L3
+  45 002a 184A     		ldr	r2, .L17+8
+  46 002c 5A60     		str	r2, [r3, #4]
+  47 002e 1A68     		ldr	r2, [r3]
+  48 0030 42F08072 		orr	r2, r2, #16777216
+  49 0034 1A60     		str	r2, [r3]
+  50              	.L4:
+  51 0036 1A68     		ldr	r2, [r3]
+  52 0038 1249     		ldr	r1, .L17
+  53 003a 9001     		lsls	r0, r2, #6
+  54 003c FBD5     		bpl	.L4
+  55 003e 144A     		ldr	r2, .L17+12
+  56 0040 1368     		ldr	r3, [r2]
+  57 0042 43F44073 		orr	r3, r3, #768
+  58 0046 43F00203 		orr	r3, r3, #2
+ARM GAS  /tmp/cc2NGvS0.s 			page 2
+
+
+  59 004a 1360     		str	r3, [r2]
+  60 004c 1368     		ldr	r3, [r2]
+  61 004e 03F00F03 		and	r3, r3, #15
+  62 0052 022B     		cmp	r3, #2
+  63 0054 00D0     		beq	.L5
+  64              	.L15:
+  65 0056 FEE7     		b	.L15
+  66              	.L5:
+  67 0058 8B68     		ldr	r3, [r1, #8]
+  68 005a 43F00203 		orr	r3, r3, #2
+  69 005e 8B60     		str	r3, [r1, #8]
+  70              	.L7:
+  71 0060 084B     		ldr	r3, .L17
+  72 0062 9A68     		ldr	r2, [r3, #8]
+  73 0064 1207     		lsls	r2, r2, #28
+  74 0066 FBD5     		bpl	.L7
+  75 0068 9A68     		ldr	r2, [r3, #8]
+  76 006a 22F0F002 		bic	r2, r2, #240
+  77 006e 9A60     		str	r2, [r3, #8]
+  78 0070 9A68     		ldr	r2, [r3, #8]
+  79 0072 42F0F002 		orr	r2, r2, #240
+  80 0076 9A60     		str	r2, [r3, #8]
+  81 0078 9A68     		ldr	r2, [r3, #8]
+  82 007a 22F46042 		bic	r2, r2, #57344
+  83 007e 9A60     		str	r2, [r3, #8]
+  84 0080 7047     		bx	lr
+  85              	.L18:
+  86 0082 00BF     		.align	2
+  87              	.L17:
+  88 0084 00380240 		.word	1073887232
+  89 0088 00700040 		.word	1073770496
+  90 008c 10540127 		.word	654398480
+  91 0090 003C0240 		.word	1073888256
+  93              		.align	1
+  94              		.global	SystemInitError
+  95              		.thumb
+  96              		.thumb_func
+  98              	SystemInitError:
+  99              		@ Volatile: function does not return.
+ 100              		@ args = 0, pretend = 0, frame = 0
+ 101              		@ frame_needed = 0, uses_anonymous_args = 0
+ 102              		@ link register save eliminated.
+ 103              	.L20:
+ 104 0094 FEE7     		b	.L20
+ 106 0096 00BF     		.ident	"GCC: (15:4.9.3+svn231177-1) 4.9.3 20150529 (prerelease)"
+ARM GAS  /tmp/cc2NGvS0.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 system.c
+     /tmp/cc2NGvS0.s:16     .text:0000000000000000 $t
+     /tmp/cc2NGvS0.s:21     .text:0000000000000000 SystemInit
+     /tmp/cc2NGvS0.s:88     .text:0000000000000084 $d
+     /tmp/cc2NGvS0.s:93     .text:0000000000000094 $t
+     /tmp/cc2NGvS0.s:98     .text:0000000000000094 SystemInitError
+
+NO UNDEFINED SYMBOLS
