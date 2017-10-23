@@ -20,14 +20,14 @@ It works for Transmission of the  data from the USART2
 Example:- 
 
    void USART_Config()
-{
-	usart2.Instance 				= 		USART2;
-	usart2.init.Data_Word_length 	= 		DATA_WORD_8_BIT;			
-	usart2.init.Stop_Bit			=		STOP_BIT_ONE;
-	usart2.init.Baud_Rate			=		9600;
-	usart2.init.Parity_Bit			=		PARITY_NONE;
-	usart2.init.Usart_Mode			=		UART_MODE_TX_RX;
-	usart2.init.Oversampling		=		OVERSAMPLING_BY_16;
+{ 
+	usart2.Instance 				= 		USART2;												// Using USART2
+	usart2.init.Data_Word_length 	= 		DATA_WORD_8_BIT;									// DATA_WORD_8_BIT only supported		
+	usart2.init.Stop_Bit			=		STOP_BIT_ONE;										// STOP bit 
+	usart2.init.Baud_Rate			=		9600;												//  Baud_Rate
+	usart2.init.Parity_Bit			=		PARITY_NONE;										//	Parity bit
+	usart2.init.Usart_Mode			=		UART_MODE_TX_RX;									//  usart mode
+	usart2.init.Oversampling		=		OVERSAMPLING_BY_16;									//  sampling
 
 
 	if(Stm_Usart_Init(&usart2) != Success)

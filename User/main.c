@@ -20,10 +20,14 @@ int main()
 
 	while(1)
 	{
+		/* fucntion for the receiving the data */
 		Stm_Usart_Receive(&usart2, &data, sizeof(data));
+
+
+		/* fucntion for the sending the data */
 		Stm_Usart_Transmitt(&usart2, &data, sizeof(data));
 
-		//pritnf("data received: %c",data);
+		
 	}
 
 
@@ -31,15 +35,15 @@ int main()
 
 }
 
-void USART_Config()
-{
-	usart2.Instance 				= 		USART2;
-	usart2.init.Data_Word_length 	= 		DATA_WORD_8_BIT;			
-	usart2.init.Stop_Bit			=		STOP_BIT_ONE;
-	usart2.init.Baud_Rate			=		9600;
-	usart2.init.Parity_Bit			=		PARITY_NONE;
-	usart2.init.Usart_Mode			=		UART_MODE_TX_RX;
-	usart2.init.Oversampling		=		OVERSAMPLING_BY_16;
+  void USART_Config()
+{ 
+	usart2.Instance 				= 		USART2;												// Using USART2
+	usart2.init.Data_Word_length 	= 		DATA_WORD_8_BIT;									// DATA_WORD_8_BIT only supported		
+	usart2.init.Stop_Bit			=		STOP_BIT_ONE;										// STOP bit 
+	usart2.init.Baud_Rate			=		9600;												//  Baud_Rate
+	usart2.init.Parity_Bit			=		PARITY_NONE;										//	Parity bit
+	usart2.init.Usart_Mode			=		UART_MODE_TX_RX;									//  usart mode
+	usart2.init.Oversampling		=		OVERSAMPLING_BY_16;									//  sampling
 
 
 	if(Stm_Usart_Init(&usart2) != Success)
