@@ -37,7 +37,8 @@
 
 /* Includes file ----------------------------------------------------*/
 
-#include "stm_uart_conf.h"
+//#include "stm_uart_conf.h"
+ #include "core_cm4.h"
 
 
 /* Exported Types ----------------------------------------------------*/
@@ -84,28 +85,39 @@ typedef enum
 
 
 /*
+ * @about Flag status
+ */
+
+typedef enum 
+{
+	LOW,
+	HIGH,
+	NONE
+}Flag_Status;
+/*
  * @about uart handle
  */
 
 typedef struct 
 {
-	USART_TypeDef 				*Instance                      	/* <USART register base address> */
+	USART_TypeDef 				*Instance;                      	/* <USART register base address> */
 
-	Uart_Init_Type 				init  							/* <USART Init Type Parameter>   */
+	Uart_Init_Type 				init;  							/* <USART Init Type Parameter>   */
 
-	uint32_t    				*pTxBuffer						/* <pointer to the data to be transferred> */
+	uint8_t    				*pTxBuffer;						/* <pointer to the data to be transferred> */
 
-	uint32_t 					TxSize							/* <size of the data to be transferred>  */
+	uint16_t 					TxSize;							/* <size of the data to be transferred>  */
 
-	uint32_t 					*pRxBuffer						/* <pointer to the data to be received>	*/
+	uint8_t 					*pRxBuffer;						/* <pointer to the data to be received>	*/
 
-	uint32_t 					RxSize							/* <Size of the data to be received> */	 
+	uint16_t 					RxSize;							/* <Size of the data to be received> */	 
 
 
 }Usart_Handle_Type;
 
 
 /* Exported Constants --------------------------------------------------*/
+
 
 
 /*
@@ -141,7 +153,7 @@ typedef struct
  * @about parity 
  */
 
-#define PARITY_NONE
+#define PARITY_NONE							0x00000000U
 #define PARITY_EVEN							((uint32_t) USART_CR1_PCE )
 #define PARITY_ODD							((uint32_t)(USART_CR1_PCE |USART_CR1_PS))
 
@@ -157,8 +169,8 @@ typedef struct
  * @about Uart state
  */
 
-#define UART_DISABLE 						((uint32_t) USART_CR1_UE ) 						
-#define UART_ENABLE							0x00000000U
+#define UART_ENABLE 						((uint32_t) USART_CR1_UE ) 						
+#define UART_DISABLE							0x00000000U
 
 /*
  * @about Wakeup Method
@@ -205,6 +217,13 @@ typedef struct
 #define FLAG_RXNE							((uint32_t)USART_SR_RXNE)
 #define FLAG_IDLE							((uint32_t)USART_SR_IDLE)
 
+
+
+/*
+ * @about NULL
+ */
+
+#define NULL						       ((void*)0)
 /* Exported Macros ---------------------------------------------------------*/
 
 /*
@@ -294,8 +313,8 @@ do 														\
  */
 
 
-#define _STM_UART_ENABLE(__HANDLE__)							((__HANDLE__)->Instance->CR1 |=  USART_CR1_UE)
-#define _STM_UART_DISABLE(__HANDLE__)							((__HANDLE__)->Instance->CR1 &= ~ USART_CR1_UE)
+#define _STM_USART_ENABLE(__HANDLE__)							((__HANDLE__)->Instance->CR1 |=  USART_CR1_UE)
+#define _STM_USART_DISABLE(__HANDLE__)							((__HANDLE__)->Instance->CR1 &= ~ USART_CR1_UE)
 
 
 
@@ -321,4 +340,52 @@ USART_Status Stm_Usart_Receive(Usart_Handle_Type *usart, uint8_t *pData, uint16_
 
 /* Private constants-----------------------------------------------------------*/
 
-#define
+
+
+
+
+
+
+
+#define STM_USART_DIV(__PCLK__, __BAUD__, OVER8)       		((__PCLK__)*1000U/(8U*(2-OVER8)*__BAUD__))
+
+#define STM_USART_MANTDIV(__PCLK__, __BAUD__, OVER8) 		((STM_USART_DIV(__PCLK__, __BAUD__, OVER8))/1000U)			
+
+#define STM_USART_FRAQDIV(__PCLK__, __BAUD__, OVER8)		((STM_USART_DIV(__PCLK__, __BAUD__, OVER8)-STM_USART_MANTDIV(__PCLK__, __BAUD__, OVER8)*1000U)/8U*(2-OVER8))
+
+#define STM_USART_BRR(__PCLK__, __BAUD__, OVER8)			 (uint32_t)(OVER8)?((STM_USART_MANTDIV(__PCLK__, __BAUD__, OVER8)<<4)+   \
+																	    (STM_USART_FRAQDIV(__PCLK__, __BAUD__, OVER8)&0xF0U)+ \
+																	    (STM_USART_FRAQDIV(__PCLK__, __BAUD__, OVER8)&0x0FU)) :  \
+																																	\
+																		((STM_USART_MANTDIV(__PCLK__, __BAUD__, OVER8)<<4)+   \
+																	    ((STM_USART_FRAQDIV(__PCLK__, __BAUD__, OVER8)&0xF8U)<<1U)+ \
+																	    (STM_USART_FRAQDIV(__PCLK__, __BAUD__, OVER8)&0x07U))
+
+/* Clock Enable Def for USART2*/
+
+#define _STM_USART2_CLKENABLE()		 					do { \
+                                        						uint32_t reg = 0x00U; \
+                                        						SET_BIT(RCC->APB1ENR, RCC_APB1ENR_USART2EN);\
+                                        						/* Delay after an RCC peripheral clock enabling */ \
+                                        						reg = READ_BIT(RCC->APB1ENR, RCC_APB1ENR_USART2EN);\
+                                          					} while(0U)
+
+/* Enable the clock of the GPIOA */
+#define _STM_GPIOA_CLKENABLE()							do {	\
+                                          					 uint32_t reg =0x00U;	\
+                                          					 SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOAEN);  \
+                                          					 /* Delay after an RCC peripheral clock enabling */ \
+                                          					 reg = READ_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOAEN); \
+                                          					}while(0U)
+
+
+/* Private Function -----------------------------------------------------------*/
+
+
+uint32_t Stm_Get_Hclk_Freq();
+uint32_t Stm_Get_Pclk1_Freq();
+uint32_t Stm_get_Pclk2_Freq();
+
+USART_Status FlagCheck(Usart_Handle_Type *usart, uint32_t flag, Flag_Status status);
+
+#endif

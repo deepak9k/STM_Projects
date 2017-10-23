@@ -33,7 +33,8 @@ OPT = -Os
 SOURCES_DIR =  \
 ~/STM_Projects/Drivers/CMSIS \
 ~/STM_Projects/Drivers/Device/Stm32f401xE \
-~/STM_Projects/User
+~/STM_Projects/User	\
+~/STM_Projects/Drivers/Device/New_Lib 
 
 # Build path
 BUILD_DIR = build
@@ -45,8 +46,11 @@ BUILD_DIR = build
 # C sources
 
 C_SOURCES =  \
-User/main.c  \
 User/system.c \
+Drivers/Device/New_Lib/src/stm_uart.c \
+User/main.c  
+
+
 
 # ASM sources
 ASM_SOURCES =  \
@@ -58,7 +62,7 @@ Drivers/Device/Stm32f401xE/Template/startup_stm32f401xe.s
 #######################################
 BINPATH = 
 PREFIX = arm-none-eabi-
-CC = $(PREFIX)gcc
+CC = $(PREFIX)gcc 
 AS = $(PREFIX)gcc -x assembler-with-cpp
 CP = $(PREFIX)objcopy
 HEX = $(CP) -O ihex
@@ -84,7 +88,8 @@ C_DEFS =  \
 C_INCLUDES =  \
 -IUser \
 -IDrivers/CMSIS/Include \
--IDrivers/Device/Stm32f401xE/Include 
+-IDrivers/Device/Stm32f401xE/Include \
+-IDrivers/Device/New_Lib/Include 
 
 
 # compile gcc flags
@@ -151,11 +156,9 @@ clean:
 
 # *** EOF ***
 
-#arm-none-eabi-gcc -mcpu=cortex-m4 -mlittle-endian -mthumb -DSTM32F401xE -T ~/STM32Cube/Projects/STM32F401RE-Nucleo/Templates/TrueSTUDIO/STM32F4xx-Nucleo/STM32F401CE_FLASH.ld -Wl,--gc-sections system.o main.o startup_stm32f401xe.o -o main.elf
-
-
-
-
-#arm-none-eabi-gcc -Wall -mcpu=cortex-m4 -mlittle-endian -mthumb -I ~/STM32Cube/Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ~/STM32Cube/Drivers/CMSIS/Include -DSTM32F401xE -Os -c system.c -o system.o
 
 #openocd -f /usr/share/openocd/scripts/board/st_nucleo_f4.cfg
+# telnet localhost 4444
+#reset halt
+#flash write_image erase STM_Projects.hex
+#reset run

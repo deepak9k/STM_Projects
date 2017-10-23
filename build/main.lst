@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccpoR3lJ.s 			page 1
+ARM GAS  /tmp/ccX5H9Iu.s 			page 1
 
 
    1              		.syntax unified
@@ -15,44 +15,80 @@ ARM GAS  /tmp/ccpoR3lJ.s 			page 1
   12              		.eabi_attribute 18, 4
   13              		.thumb
   14              		.file	"main.c"
-  15              		.section	.text.startup,"ax",%progbits
+  15              		.text
   16              		.align	1
-  17              		.global	main
+  17              		.global	USART_Config
   18              		.thumb
   19              		.thumb_func
-  21              	main:
+  21              	USART_Config:
   22              		@ args = 0, pretend = 0, frame = 0
   23              		@ frame_needed = 0, uses_anonymous_args = 0
   24              		@ link register save eliminated.
-  25 0000 094A     		ldr	r2, .L2
-  26 0002 136B     		ldr	r3, [r2, #48]
-  27 0004 43F00103 		orr	r3, r3, #1
-  28 0008 1363     		str	r3, [r2, #48]
-  29 000a 084B     		ldr	r3, .L2+4
-  30 000c 1A68     		ldr	r2, [r3]
-  31 000e 42F48062 		orr	r2, r2, #1024
-  32 0012 1A60     		str	r2, [r3]
-  33 0014 9A68     		ldr	r2, [r3, #8]
-  34 0016 42F44062 		orr	r2, r2, #3072
-  35 001a 9A60     		str	r2, [r3, #8]
-  36 001c 9A69     		ldr	r2, [r3, #24]
-  37 001e 42F02002 		orr	r2, r2, #32
-  38 0022 9A61     		str	r2, [r3, #24]
-  39 0024 0020     		movs	r0, #0
-  40 0026 7047     		bx	lr
-  41              	.L3:
-  42              		.align	2
-  43              	.L2:
-  44 0028 00380240 		.word	1073887232
-  45 002c 00000240 		.word	1073872896
-  47              		.ident	"GCC: (15:4.9.3+svn231177-1) 4.9.3 20150529 (prerelease)"
-ARM GAS  /tmp/ccpoR3lJ.s 			page 2
+  25 0000 0748     		ldr	r0, .L2
+  26 0002 084B     		ldr	r3, .L2+4
+  27 0004 0360     		str	r3, [r0]
+  28 0006 4FF41652 		mov	r2, #9600
+  29 000a 0023     		movs	r3, #0
+  30 000c C260     		str	r2, [r0, #12]
+  31 000e 0C22     		movs	r2, #12
+  32 0010 4360     		str	r3, [r0, #4]
+  33 0012 8360     		str	r3, [r0, #8]
+  34 0014 0361     		str	r3, [r0, #16]
+  35 0016 4261     		str	r2, [r0, #20]
+  36 0018 8361     		str	r3, [r0, #24]
+  37 001a FFF7FEBF 		b	Stm_Usart_Init
+  38              	.L3:
+  39 001e 00BF     		.align	2
+  40              	.L2:
+  41 0020 00000000 		.word	usart2
+  42 0024 00440040 		.word	1073759232
+  44              		.section	.text.startup,"ax",%progbits
+  45              		.align	1
+  46              		.global	main
+  47              		.thumb
+  48              		.thumb_func
+  50              	main:
+  51              		@ Volatile: function does not return.
+  52              		@ args = 0, pretend = 0, frame = 0
+  53              		@ frame_needed = 0, uses_anonymous_args = 0
+  54 0000 08B5     		push	{r3, lr}
+  55 0002 FFF7FEFF 		bl	USART_Config
+  56              	.L5:
+  57 0006 0549     		ldr	r1, .L7
+  58 0008 0548     		ldr	r0, .L7+4
+  59 000a 0122     		movs	r2, #1
+  60 000c FFF7FEFF 		bl	Stm_Usart_Receive
+ARM GAS  /tmp/ccX5H9Iu.s 			page 2
+
+
+  61 0010 0249     		ldr	r1, .L7
+  62 0012 0348     		ldr	r0, .L7+4
+  63 0014 0122     		movs	r2, #1
+  64 0016 FFF7FEFF 		bl	Stm_Usart_Transmitt
+  65 001a F4E7     		b	.L5
+  66              	.L8:
+  67              		.align	2
+  68              	.L7:
+  69 001c 00000000 		.word	data
+  70 0020 00000000 		.word	usart2
+  72              		.comm	data,1,1
+  73              		.comm	usart2,44,4
+  74              		.ident	"GCC: (15:4.9.3+svn231177-1) 4.9.3 20150529 (prerelease)"
+ARM GAS  /tmp/ccX5H9Iu.s 			page 3
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 main.c
-     /tmp/ccpoR3lJ.s:16     .text.startup:0000000000000000 $t
-     /tmp/ccpoR3lJ.s:21     .text.startup:0000000000000000 main
-     /tmp/ccpoR3lJ.s:44     .text.startup:0000000000000028 $d
+     /tmp/ccX5H9Iu.s:16     .text:0000000000000000 $t
+     /tmp/ccX5H9Iu.s:21     .text:0000000000000000 USART_Config
+     /tmp/ccX5H9Iu.s:41     .text:0000000000000020 $d
+                            *COM*:000000000000002c usart2
+     /tmp/ccX5H9Iu.s:45     .text.startup:0000000000000000 $t
+     /tmp/ccX5H9Iu.s:50     .text.startup:0000000000000000 main
+     /tmp/ccX5H9Iu.s:69     .text.startup:000000000000001c $d
+                            *COM*:0000000000000001 data
 
-NO UNDEFINED SYMBOLS
+UNDEFINED SYMBOLS
+Stm_Usart_Init
+Stm_Usart_Receive
+Stm_Usart_Transmitt

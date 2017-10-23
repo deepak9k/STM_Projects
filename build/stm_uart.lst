@@ -1,0 +1,384 @@
+ARM GAS  /tmp/ccnUMs7n.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m4
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"stm_uart.c"
+  15              		.text
+  16              		.align	1
+  17              		.global	Stm_Get_Hclk_Freq
+  18              		.thumb
+  19              		.thumb_func
+  21              	Stm_Get_Hclk_Freq:
+  22              		@ args = 0, pretend = 0, frame = 0
+  23              		@ frame_needed = 0, uses_anonymous_args = 0
+  24              		@ link register save eliminated.
+  25 0000 014B     		ldr	r3, .L2
+  26 0002 1868     		ldr	r0, [r3]
+  27 0004 7047     		bx	lr
+  28              	.L3:
+  29 0006 00BF     		.align	2
+  30              	.L2:
+  31 0008 00000000 		.word	SystemCoreClock
+  33              		.align	1
+  34              		.global	Stm_Get_Pclk1_Freq
+  35              		.thumb
+  36              		.thumb_func
+  38              	Stm_Get_Pclk1_Freq:
+  39              		@ args = 0, pretend = 0, frame = 0
+  40              		@ frame_needed = 0, uses_anonymous_args = 0
+  41              		@ link register save eliminated.
+  42 000c 084B     		ldr	r3, .L5
+  43 000e 4FF4E052 		mov	r2, #7168
+  44 0012 9B68     		ldr	r3, [r3, #8]
+  45              	@ 531 "Drivers/CMSIS/Include/cmsis_gcc.h" 1
+  46 0014 92FAA2F2 		rbit r2, r2
+  47              	@ 0 "" 2
+  48              		.thumb
+  49 0018 03F4E053 		and	r3, r3, #7168
+  50 001c B2FA82F2 		clz	r2, r2
+  51 0020 D340     		lsrs	r3, r3, r2
+  52 0022 044A     		ldr	r2, .L5+4
+  53 0024 D35C     		ldrb	r3, [r2, r3]	@ zero_extendqisi2
+  54 0026 044A     		ldr	r2, .L5+8
+  55 0028 1068     		ldr	r0, [r2]
+  56 002a D840     		lsrs	r0, r0, r3
+  57 002c 7047     		bx	lr
+  58              	.L6:
+  59 002e 00BF     		.align	2
+  60              	.L5:
+ARM GAS  /tmp/ccnUMs7n.s 			page 2
+
+
+  61 0030 00380240 		.word	1073887232
+  62 0034 00000000 		.word	APBPrescTable
+  63 0038 00000000 		.word	SystemCoreClock
+  65              		.align	1
+  66              		.global	Stm_Usart_Init
+  67              		.thumb
+  68              		.thumb_func
+  70              	Stm_Usart_Init:
+  71              		@ args = 0, pretend = 0, frame = 0
+  72              		@ frame_needed = 0, uses_anonymous_args = 0
+  73 003c 2DE9F843 		push	{r3, r4, r5, r6, r7, r8, r9, lr}
+  74 0040 0546     		mov	r5, r0
+  75 0042 0028     		cmp	r0, #0
+  76 0044 00F0AB80 		beq	.L11
+  77 0048 564B     		ldr	r3, .L13
+  78 004a 0768     		ldr	r7, [r0]
+  79 004c 1A6C     		ldr	r2, [r3, #64]
+  80 004e 42F40032 		orr	r2, r2, #131072
+  81 0052 1A64     		str	r2, [r3, #64]
+  82 0054 1A6C     		ldr	r2, [r3, #64]
+  83 0056 1A6B     		ldr	r2, [r3, #48]
+  84 0058 42F00102 		orr	r2, r2, #1
+  85 005c 1A63     		str	r2, [r3, #48]
+  86 005e 1B6B     		ldr	r3, [r3, #48]
+  87 0060 FB68     		ldr	r3, [r7, #12]
+  88 0062 2969     		ldr	r1, [r5, #16]
+  89 0064 23F40053 		bic	r3, r3, #8192
+  90 0068 FB60     		str	r3, [r7, #12]
+  91 006a 3B69     		ldr	r3, [r7, #16]
+  92 006c 23F44052 		bic	r2, r3, #12288
+  93 0070 8368     		ldr	r3, [r0, #8]
+  94 0072 8069     		ldr	r0, [r0, #24]
+  95 0074 1343     		orrs	r3, r3, r2
+  96 0076 6A68     		ldr	r2, [r5, #4]
+  97 0078 3B61     		str	r3, [r7, #16]
+  98 007a FB68     		ldr	r3, [r7, #12]
+  99 007c 1143     		orrs	r1, r1, r2
+ 100 007e 6A69     		ldr	r2, [r5, #20]
+ 101 0080 23F41643 		bic	r3, r3, #38400
+ 102 0084 0A43     		orrs	r2, r2, r1
+ 103 0086 23F00C03 		bic	r3, r3, #12
+ 104 008a 0243     		orrs	r2, r2, r0
+ 105 008c 1343     		orrs	r3, r3, r2
+ 106 008e B0F5004F 		cmp	r0, #32768
+ 107 0092 FB60     		str	r3, [r7, #12]
+ 108 0094 4FF47A74 		mov	r4, #1000
+ 109 0098 38D1     		bne	.L9
+ 110 009a FFF7FEFF 		bl	Stm_Get_Pclk1_Freq
+ 111 009e EB68     		ldr	r3, [r5, #12]
+ 112 00a0 6043     		muls	r0, r4, r0
+ 113 00a2 4FEAC308 		lsl	r8, r3, #3
+ 114 00a6 B0FBF8F8 		udiv	r8, r0, r8
+ 115 00aa FFF7FEFF 		bl	Stm_Get_Pclk1_Freq
+ 116 00ae B8FBF4F8 		udiv	r8, r8, r4
+ 117 00b2 EE68     		ldr	r6, [r5, #12]
+ 118 00b4 6043     		muls	r0, r4, r0
+ 119 00b6 F600     		lsls	r6, r6, #3
+ARM GAS  /tmp/ccnUMs7n.s 			page 3
+
+
+ 120 00b8 B0FBF6F6 		udiv	r6, r0, r6
+ 121 00bc FFF7FEFF 		bl	Stm_Get_Pclk1_Freq
+ 122 00c0 EB68     		ldr	r3, [r5, #12]
+ 123 00c2 6043     		muls	r0, r4, r0
+ 124 00c4 DB00     		lsls	r3, r3, #3
+ 125 00c6 B0FBF3F0 		udiv	r0, r0, r3
+ 126 00ca B0FBF4F0 		udiv	r0, r0, r4
+ 127 00ce 04FB1066 		mls	r6, r4, r0, r6
+ 128 00d2 FFF7FEFF 		bl	Stm_Get_Pclk1_Freq
+ 129 00d6 EB68     		ldr	r3, [r5, #12]
+ 130 00d8 6043     		muls	r0, r4, r0
+ 131 00da DB00     		lsls	r3, r3, #3
+ 132 00dc B0FBF3F9 		udiv	r9, r0, r3
+ 133 00e0 FFF7FEFF 		bl	Stm_Get_Pclk1_Freq
+ 134 00e4 EB68     		ldr	r3, [r5, #12]
+ 135 00e6 6043     		muls	r0, r4, r0
+ 136 00e8 F608     		lsrs	r6, r6, #3
+ 137 00ea DB00     		lsls	r3, r3, #3
+ 138 00ec B0FBF3F0 		udiv	r0, r0, r3
+ 139 00f0 B0FBF4F0 		udiv	r0, r0, r4
+ 140 00f4 04FB1094 		mls	r4, r4, r0, r9
+ 141 00f8 06F0F006 		and	r6, r6, #240
+ 142 00fc C4F3C300 		ubfx	r0, r4, #3, #4
+ 143 0100 4FEA0818 		lsl	r8, r8, #4
+ 144 0104 3418     		adds	r4, r6, r0
+ 145 0106 4444     		add	r4, r4, r8
+ 146 0108 BC60     		str	r4, [r7, #8]
+ 147 010a 38E0     		b	.L10
+ 148              	.L9:
+ 149 010c FFF7FEFF 		bl	Stm_Get_Pclk1_Freq
+ 150 0110 EB68     		ldr	r3, [r5, #12]
+ 151 0112 6043     		muls	r0, r4, r0
+ 152 0114 4FEA0318 		lsl	r8, r3, #4
+ 153 0118 B0FBF8F8 		udiv	r8, r0, r8
+ 154 011c FFF7FEFF 		bl	Stm_Get_Pclk1_Freq
+ 155 0120 B8FBF4F8 		udiv	r8, r8, r4
+ 156 0124 EE68     		ldr	r6, [r5, #12]
+ 157 0126 6043     		muls	r0, r4, r0
+ 158 0128 3601     		lsls	r6, r6, #4
+ 159 012a B0FBF6F6 		udiv	r6, r0, r6
+ 160 012e FFF7FEFF 		bl	Stm_Get_Pclk1_Freq
+ 161 0132 EB68     		ldr	r3, [r5, #12]
+ 162 0134 6043     		muls	r0, r4, r0
+ 163 0136 1B01     		lsls	r3, r3, #4
+ 164 0138 B0FBF3F0 		udiv	r0, r0, r3
+ 165 013c B0FBF4F0 		udiv	r0, r0, r4
+ 166 0140 04FB1066 		mls	r6, r4, r0, r6
+ 167 0144 FFF7FEFF 		bl	Stm_Get_Pclk1_Freq
+ 168 0148 EB68     		ldr	r3, [r5, #12]
+ 169 014a 6043     		muls	r0, r4, r0
+ 170 014c 1B01     		lsls	r3, r3, #4
+ 171 014e B0FBF3F9 		udiv	r9, r0, r3
+ 172 0152 FFF7FEFF 		bl	Stm_Get_Pclk1_Freq
+ 173 0156 EB68     		ldr	r3, [r5, #12]
+ 174 0158 6043     		muls	r0, r4, r0
+ 175 015a 1B01     		lsls	r3, r3, #4
+ 176 015c B0FBF3F0 		udiv	r0, r0, r3
+ARM GAS  /tmp/ccnUMs7n.s 			page 4
+
+
+ 177 0160 B0FBF4F0 		udiv	r0, r0, r4
+ 178 0164 04FB1094 		mls	r4, r4, r0, r9
+ 179 0168 A408     		lsrs	r4, r4, #2
+ 180 016a 4FEA0818 		lsl	r8, r8, #4
+ 181 016e 7608     		lsrs	r6, r6, #1
+ 182 0170 04F00604 		and	r4, r4, #6
+ 183 0174 06F4F876 		and	r6, r6, #496
+ 184 0178 4444     		add	r4, r4, r8
+ 185 017a 2644     		add	r6, r6, r4
+ 186 017c BE60     		str	r6, [r7, #8]
+ 187              	.L10:
+ 188 017e 2B68     		ldr	r3, [r5]
+ 189 0180 1A69     		ldr	r2, [r3, #16]
+ 190 0182 22F49042 		bic	r2, r2, #18432
+ 191 0186 1A61     		str	r2, [r3, #16]
+ 192 0188 5A69     		ldr	r2, [r3, #20]
+ 193 018a 22F02A02 		bic	r2, r2, #42
+ 194 018e 5A61     		str	r2, [r3, #20]
+ 195 0190 DA68     		ldr	r2, [r3, #12]
+ 196 0192 42F40052 		orr	r2, r2, #8192
+ 197 0196 DA60     		str	r2, [r3, #12]
+ 198 0198 0020     		movs	r0, #0
+ 199 019a BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 200              	.L11:
+ 201 019e 0120     		movs	r0, #1
+ 202 01a0 BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 203              	.L14:
+ 204              		.align	2
+ 205              	.L13:
+ 206 01a4 00380240 		.word	1073887232
+ 208              		.align	1
+ 209              		.global	Stm_Get_Pclk2_Freq
+ 210              		.thumb
+ 211              		.thumb_func
+ 213              	Stm_Get_Pclk2_Freq:
+ 214              		@ args = 0, pretend = 0, frame = 0
+ 215              		@ frame_needed = 0, uses_anonymous_args = 0
+ 216              		@ link register save eliminated.
+ 217 01a8 084B     		ldr	r3, .L16
+ 218 01aa 4FF46042 		mov	r2, #57344
+ 219 01ae 9B68     		ldr	r3, [r3, #8]
+ 220              	@ 531 "Drivers/CMSIS/Include/cmsis_gcc.h" 1
+ 221 01b0 92FAA2F2 		rbit r2, r2
+ 222              	@ 0 "" 2
+ 223              		.thumb
+ 224 01b4 03F46043 		and	r3, r3, #57344
+ 225 01b8 B2FA82F2 		clz	r2, r2
+ 226 01bc D340     		lsrs	r3, r3, r2
+ 227 01be 044A     		ldr	r2, .L16+4
+ 228 01c0 D35C     		ldrb	r3, [r2, r3]	@ zero_extendqisi2
+ 229 01c2 044A     		ldr	r2, .L16+8
+ 230 01c4 1068     		ldr	r0, [r2]
+ 231 01c6 D840     		lsrs	r0, r0, r3
+ 232 01c8 7047     		bx	lr
+ 233              	.L17:
+ 234 01ca 00BF     		.align	2
+ 235              	.L16:
+ARM GAS  /tmp/ccnUMs7n.s 			page 5
+
+
+ 236 01cc 00380240 		.word	1073887232
+ 237 01d0 00000000 		.word	APBPrescTable
+ 238 01d4 00000000 		.word	SystemCoreClock
+ 240              		.align	1
+ 241              		.global	FlagCheck
+ 242              		.thumb
+ 243              		.thumb_func
+ 245              	FlagCheck:
+ 246              		@ args = 0, pretend = 0, frame = 0
+ 247              		@ frame_needed = 0, uses_anonymous_args = 0
+ 248 01d8 30B5     		push	{r4, r5, lr}
+ 249 01da 0225     		movs	r5, #2
+ 250              	.L19:
+ 251 01dc 2C46     		mov	r4, r5
+ 252              	.L20:
+ 253 01de 9442     		cmp	r4, r2
+ 254 01e0 09D0     		beq	.L23
+ 255 01e2 0368     		ldr	r3, [r0]
+ 256 01e4 1B68     		ldr	r3, [r3]
+ 257 01e6 0B40     		ands	r3, r3, r1
+ 258 01e8 8B42     		cmp	r3, r1
+ 259 01ea 4FF00005 		mov	r5, #0
+ 260 01ee 4FF00104 		mov	r4, #1
+ 261 01f2 F4D0     		beq	.L20
+ 262 01f4 F2E7     		b	.L19
+ 263              	.L23:
+ 264 01f6 0020     		movs	r0, #0
+ 265 01f8 30BD     		pop	{r4, r5, pc}
+ 267              		.align	1
+ 268              		.global	Stm_Usart_Transmitt
+ 269              		.thumb
+ 270              		.thumb_func
+ 272              	Stm_Usart_Transmitt:
+ 273              		@ args = 0, pretend = 0, frame = 0
+ 274              		@ frame_needed = 0, uses_anonymous_args = 0
+ 275 01fa 70B5     		push	{r4, r5, r6, lr}
+ 276 01fc 0646     		mov	r6, r0
+ 277 01fe 0D46     		mov	r5, r1
+ 278 0200 0AB9     		cbnz	r2, .L25
+ 279              	.L27:
+ 280 0202 0120     		movs	r0, #1
+ 281 0204 70BD     		pop	{r4, r5, r6, pc}
+ 282              	.L25:
+ 283 0206 0029     		cmp	r1, #0
+ 284 0208 FBD0     		beq	.L27
+ 285 020a 541E     		subs	r4, r2, #1
+ 286 020c A4B2     		uxth	r4, r4
+ 287 020e 0134     		adds	r4, r4, #1
+ 288 0210 F161     		str	r1, [r6, #28]
+ 289 0212 0C44     		add	r4, r4, r1
+ 290 0214 0284     		strh	r2, [r0, #32]	@ movhi
+ 291              	.L28:
+ 292 0216 3046     		mov	r0, r6
+ 293 0218 8021     		movs	r1, #128
+ 294 021a 0122     		movs	r2, #1
+ 295 021c FFF7FEFF 		bl	FlagCheck
+ 296 0220 0028     		cmp	r0, #0
+ARM GAS  /tmp/ccnUMs7n.s 			page 6
+
+
+ 297 0222 EED1     		bne	.L27
+ 298 0224 15F8012B 		ldrb	r2, [r5], #1	@ zero_extendqisi2
+ 299 0228 3368     		ldr	r3, [r6]
+ 300 022a A542     		cmp	r5, r4
+ 301 022c 5A60     		str	r2, [r3, #4]
+ 302 022e F2D1     		bne	.L28
+ 303 0230 3046     		mov	r0, r6
+ 304 0232 4021     		movs	r1, #64
+ 305 0234 0122     		movs	r2, #1
+ 306 0236 FFF7FEFF 		bl	FlagCheck
+ 307 023a 0030     		adds	r0, r0, #0
+ 308 023c 18BF     		it	ne
+ 309 023e 0120     		movne	r0, #1
+ 310 0240 70BD     		pop	{r4, r5, r6, pc}
+ 312              		.align	1
+ 313              		.global	Stm_Usart_Receive
+ 314              		.thumb
+ 315              		.thumb_func
+ 317              	Stm_Usart_Receive:
+ 318              		@ args = 0, pretend = 0, frame = 0
+ 319              		@ frame_needed = 0, uses_anonymous_args = 0
+ 320 0242 70B5     		push	{r4, r5, r6, lr}
+ 321 0244 0646     		mov	r6, r0
+ 322 0246 0AB9     		cbnz	r2, .L34
+ 323              	.L36:
+ 324 0248 0120     		movs	r0, #1
+ 325 024a 70BD     		pop	{r4, r5, r6, pc}
+ 326              	.L34:
+ 327 024c 0029     		cmp	r1, #0
+ 328 024e FBD0     		beq	.L36
+ 329 0250 0285     		strh	r2, [r0, #40]	@ movhi
+ 330 0252 013A     		subs	r2, r2, #1
+ 331 0254 92B2     		uxth	r2, r2
+ 332 0256 0232     		adds	r2, r2, #2
+ 333 0258 4162     		str	r1, [r0, #36]
+ 334 025a 4D1C     		adds	r5, r1, #1
+ 335 025c 8C18     		adds	r4, r1, r2
+ 336              	.L39:
+ 337 025e 3046     		mov	r0, r6
+ 338 0260 2021     		movs	r1, #32
+ 339 0262 0122     		movs	r2, #1
+ 340 0264 FFF7FEFF 		bl	FlagCheck
+ 341 0268 0028     		cmp	r0, #0
+ 342 026a EDD1     		bne	.L36
+ 343 026c 3368     		ldr	r3, [r6]
+ 344 026e 3269     		ldr	r2, [r6, #16]
+ 345 0270 5B68     		ldr	r3, [r3, #4]
+ 346 0272 0AB1     		cbz	r2, .L44
+ 347 0274 03F07F03 		and	r3, r3, #127
+ 348              	.L44:
+ 349 0278 05F8013C 		strb	r3, [r5, #-1]
+ 350 027c 0135     		adds	r5, r5, #1
+ 351 027e A542     		cmp	r5, r4
+ 352 0280 EDD1     		bne	.L39
+ 353 0282 70BD     		pop	{r4, r5, r6, pc}
+ 355              		.ident	"GCC: (15:4.9.3+svn231177-1) 4.9.3 20150529 (prerelease)"
+ARM GAS  /tmp/ccnUMs7n.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm_uart.c
+     /tmp/ccnUMs7n.s:16     .text:0000000000000000 $t
+     /tmp/ccnUMs7n.s:21     .text:0000000000000000 Stm_Get_Hclk_Freq
+     /tmp/ccnUMs7n.s:31     .text:0000000000000008 $d
+     /tmp/ccnUMs7n.s:33     .text:000000000000000c $t
+     /tmp/ccnUMs7n.s:38     .text:000000000000000c Stm_Get_Pclk1_Freq
+     /tmp/ccnUMs7n.s:61     .text:0000000000000030 $d
+     /tmp/ccnUMs7n.s:65     .text:000000000000003c $t
+     /tmp/ccnUMs7n.s:70     .text:000000000000003c Stm_Usart_Init
+     /tmp/ccnUMs7n.s:206    .text:00000000000001a4 $d
+     /tmp/ccnUMs7n.s:208    .text:00000000000001a8 $t
+     /tmp/ccnUMs7n.s:213    .text:00000000000001a8 Stm_Get_Pclk2_Freq
+     /tmp/ccnUMs7n.s:236    .text:00000000000001cc $d
+     /tmp/ccnUMs7n.s:240    .text:00000000000001d8 $t
+     /tmp/ccnUMs7n.s:245    .text:00000000000001d8 FlagCheck
+     /tmp/ccnUMs7n.s:272    .text:00000000000001fa Stm_Usart_Transmitt
+     /tmp/ccnUMs7n.s:317    .text:0000000000000242 Stm_Usart_Receive
+
+UNDEFINED SYMBOLS
+SystemCoreClock
+APBPrescTable

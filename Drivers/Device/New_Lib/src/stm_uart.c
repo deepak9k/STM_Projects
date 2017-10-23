@@ -58,6 +58,7 @@
 
 /* Include ---------------------------------------------------------------*/
 
+#include "stm32f4xx.h"
 #include "stm_uart.h"
 
 /* Exported Function ------------------------------------------------------*/
@@ -97,8 +98,18 @@
  	{
  		return Error;
  	}
+
+ 	/* Enable GPIOA clock */
+
+	
+
+ 	/* Enable the USART CLOCK */
+ 	_STM_USART2_CLKENABLE();
+  
+  _STM_GPIOA_CLKENABLE();
+
  	/* Disable the peripheral */
-	_STM_UART_DISABLE(usart);
+	_STM_USART_DISABLE(usart);
 
  	/*-------------- USART CR2 Configuration----------------------------- */
    
@@ -126,8 +137,184 @@
 
     /* Write the reg value */
     WRITE_REG(usart->Instance->CR1, (uint32_t)reg);
-  
-  	
 
+    /*-----------------Setting the USART BRR Register----------------------------*/
+
+    /* For now it is available for USART 2 */
+
+    if(usart->init.Oversampling == OVERSAMPLING_BY_8 )
+    {
+    	usart->Instance->BRR = STM_USART_BRR(Stm_Get_Pclk1_Freq(), usart->init.Baud_Rate,0x01);
+    }
+    else
+    {
+    	usart->Instance->BRR = STM_USART_BRR(Stm_Get_Pclk1_Freq(), usart->init.Baud_Rate,0x00);
+    }
+  
+  	/* In asynchronous mode, the following bits must be kept cleared: 
+     - LINEN and CLKEN bits in the USART_CR2 register,
+     - SCEN, HDSEL and IREN  bits in the USART_CR3 register.*/
+  		CLEAR_BIT(usart->Instance->CR2, (USART_CR2_LINEN | USART_CR2_CLKEN));
+  		CLEAR_BIT(usart->Instance->CR3, (USART_CR3_SCEN | USART_CR3_HDSEL | USART_CR3_IREN));
+
+  	/* Enable the USART */	
+  	_STM_USART_ENABLE(usart);
+
+  	return Success;
 
  }
+
+ /*
+  * @about Usart transmitt function  for sending the data only for the 8 frame;
+  *
+  *	@param      -Usart_Handle_Type for  the handle of usart that contain configuration information
+  *				-pData  is a data address which going to be transmitted
+  *				-size  is the size of the data
+  *
+  * @retvalue   -status of the transmitter function
+  */
+
+
+ 
+ USART_Status Stm_Usart_Transmitt(Usart_Handle_Type *usart, uint8_t *pData, uint16_t size)
+ {
+ 	uint16_t temp=size;
+
+ 	if((size == 0)||(pData == NULL))
+ 	{
+ 		return Error;
+ 	}
+ 	usart->pTxBuffer = pData;
+ 	usart->TxSize = size;
+
+ 	while(temp>0U)
+ 	{
+ 		temp--;
+ 		if(FlagCheck(usart, FLAG_TXE, HIGH) != Success)
+ 		{
+ 			return Error;
+ 		}
+
+ 		usart->Instance->DR = (*pData++ &(uint8_t)0xFF);
+
+	}
+	if(FlagCheck(usart, FLAG_TC, HIGH) != Success)
+	{
+		return Error;
+	}
+
+	return Success;
+ }
+
+
+ /*
+  * @about Usart Receiver function  for Receiving  the data only for the 8 frame;
+  *
+  *	@param      -Usart_Handle_Type for  the handle of usart that contain configuration information
+  *				-pData  is a data address which going to be received
+  *			-size  is the size of the data
+  *
+  * @retvalue   -status of the transmitter function
+  */
+
+ USART_Status Stm_Usart_Receive(Usart_Handle_Type *usart, uint8_t *pData, uint16_t size)
+ {
+ 	uint16_t temp=size;
+
+ 	if((size == 0)||(pData == NULL))
+ 	{
+ 		return Error;
+ 	}
+ 	usart->pRxBuffer = pData;
+ 	usart->RxSize = size;
+
+ 	while(temp>0U)
+ 	{
+ 		temp--;
+ 		if(FlagCheck(usart, FLAG_RXNE, HIGH) != Success)
+ 		{
+ 			return Error;
+ 		}
+ 		 if(usart->init.Parity_Bit == PARITY_NONE)
+        {
+          *pData++ = (uint8_t)(usart->Instance->DR & (uint8_t)0x00FF);
+        }
+        else
+        {
+          *pData++ = (uint8_t)(usart->Instance->DR & (uint8_t)0x007F);
+        }
+
+ 	
+
+	}
+
+	return Success;
+ }
+
+
+ /* Private Function-----------------------------------------------------------------*/
+
+
+ uint32_t Stm_Get_Hclk_Freq()
+ {
+ 	return SystemCoreClock;
+ }
+
+ uint32_t Stm_Get_Pclk1_Freq()
+ {
+ 	return (Stm_Get_Hclk_Freq() >> APBPrescTable[(RCC->CFGR & RCC_CFGR_PPRE1)>> POSITION_VAL(RCC_CFGR_PPRE1)]);
+ }
+
+ uint32_t Stm_Get_Pclk2_Freq()
+ {
+ 	return (Stm_Get_Hclk_Freq() >> APBPrescTable[(RCC->CFGR & RCC_CFGR_PPRE2)>> POSITION_VAL(RCC_CFGR_PPRE2)]);
+ }
+
+
+
+ USART_Status FlagCheck(Usart_Handle_Type *usart, uint32_t flag, Flag_Status status)
+ {
+ 	Flag_Status temp=NONE;
+
+ 	while(temp != status)
+ 	{
+ 		if(_STM_READ_FLAG(usart ,flag ))
+ 		{
+ 			temp=HIGH;
+ 		}
+ 		else
+ 		{
+ 			temp=LOW;
+ 		}
+ 	}
+
+ 	return Success;
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

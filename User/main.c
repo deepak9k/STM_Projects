@@ -1,22 +1,50 @@
 #include "stm32f4xx.h"
+#include "stm_uart.h"
+#include <stdio.h>
 
-#define LED_PIN 		5
-#define LED_ON() GPIOA->BSRR |= (1 << 5)
-#define LED_OFF() GPIOA->BSRR |= (1 << 5)
+/*Def variable */
+Usart_Handle_Type usart2;
+
+uint8_t data;
+
+void USART_Config();
+
 
 int main()
 {
-	/* Enable GPIOA clock */
+	
 
-	 RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
-	  /*configure GPIOA pin 5 as output */
+	 /* Initialize the USART */
 
-	 GPIOA->MODER |= (1 << (LED_PIN << 1));
+	USART_Config();
 
-	 GPIOA->OSPEEDR |= (3 << (LED_PIN << 1));
+	while(1)
+	{
+		Stm_Usart_Receive(&usart2, &data, sizeof(data));
+		Stm_Usart_Transmitt(&usart2, &data, sizeof(data));
 
-	 LED_ON();
+		//pritnf("data received: %c",data);
+	}
+
 
 	 return 0;
+
+}
+
+void USART_Config()
+{
+	usart2.Instance 				= 		USART2;
+	usart2.init.Data_Word_length 	= 		DATA_WORD_8_BIT;			
+	usart2.init.Stop_Bit			=		STOP_BIT_ONE;
+	usart2.init.Baud_Rate			=		9600;
+	usart2.init.Parity_Bit			=		PARITY_NONE;
+	usart2.init.Usart_Mode			=		UART_MODE_TX_RX;
+	usart2.init.Oversampling		=		OVERSAMPLING_BY_16;
+
+
+	if(Stm_Usart_Init(&usart2) != Success)
+	{
+		/* add code for error handling*/
+	}
 
 }

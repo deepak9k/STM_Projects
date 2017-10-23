@@ -1,10 +1,15 @@
 #include <stm32f4xx.h>
 
 
+
 #define SYSTEM_INIT_ERROR_FLASH 		0x01
 #define SYSTEM_INIT_ERROR_PLL			0x02
 #define SYSTEM_INIT_ERROR_CLKSRC		0x04
 #define SYSTEM_INIT_ERROR_HSI			0x08
+
+uint32_t SystemCoreClock = 16000000;
+const uint8_t AHBPrescTable[16] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 6, 7, 8, 9};
+const uint8_t APBPrescTable[8]  = {0, 0, 0, 0, 1, 2, 3, 4};
 
 
 void SystemInitError(uint8_t error_source);

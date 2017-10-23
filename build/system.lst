@@ -1,4 +1,4 @@
-ARM GAS  /tmp/cc2NGvS0.s 			page 1
+ARM GAS  /tmp/cckjiXh1.s 			page 1
 
 
    1              		.syntax unified
@@ -58,7 +58,7 @@ ARM GAS  /tmp/cc2NGvS0.s 			page 1
   56 0040 1368     		ldr	r3, [r2]
   57 0042 43F44073 		orr	r3, r3, #768
   58 0046 43F00203 		orr	r3, r3, #2
-ARM GAS  /tmp/cc2NGvS0.s 			page 2
+ARM GAS  /tmp/cckjiXh1.s 			page 2
 
 
   59 004a 1360     		str	r3, [r2]
@@ -105,16 +105,57 @@ ARM GAS  /tmp/cc2NGvS0.s 			page 1
  102              		@ link register save eliminated.
  103              	.L20:
  104 0094 FEE7     		b	.L20
- 106 0096 00BF     		.ident	"GCC: (15:4.9.3+svn231177-1) 4.9.3 20150529 (prerelease)"
-ARM GAS  /tmp/cc2NGvS0.s 			page 3
+ 106              		.global	APBPrescTable
+ 107              		.global	AHBPrescTable
+ 108              		.global	SystemCoreClock
+ 109 0096 00BF     		.section	.rodata
+ 112              	APBPrescTable:
+ 113 0000 00       		.byte	0
+ 114 0001 00       		.byte	0
+ 115 0002 00       		.byte	0
+ 116 0003 00       		.byte	0
+ 117 0004 01       		.byte	1
+ 118 0005 02       		.byte	2
+ 119 0006 03       		.byte	3
+ 120 0007 04       		.byte	4
+ARM GAS  /tmp/cckjiXh1.s 			page 3
+
+
+ 123              	AHBPrescTable:
+ 124 0008 00       		.byte	0
+ 125 0009 00       		.byte	0
+ 126 000a 00       		.byte	0
+ 127 000b 00       		.byte	0
+ 128 000c 00       		.byte	0
+ 129 000d 00       		.byte	0
+ 130 000e 00       		.byte	0
+ 131 000f 00       		.byte	0
+ 132 0010 01       		.byte	1
+ 133 0011 02       		.byte	2
+ 134 0012 03       		.byte	3
+ 135 0013 04       		.byte	4
+ 136 0014 06       		.byte	6
+ 137 0015 07       		.byte	7
+ 138 0016 08       		.byte	8
+ 139 0017 09       		.byte	9
+ 140              		.data
+ 141              		.align	2
+ 144              	SystemCoreClock:
+ 145 0000 0024F400 		.word	16000000
+ 146              		.ident	"GCC: (15:4.9.3+svn231177-1) 4.9.3 20150529 (prerelease)"
+ARM GAS  /tmp/cckjiXh1.s 			page 4
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 system.c
-     /tmp/cc2NGvS0.s:16     .text:0000000000000000 $t
-     /tmp/cc2NGvS0.s:21     .text:0000000000000000 SystemInit
-     /tmp/cc2NGvS0.s:88     .text:0000000000000084 $d
-     /tmp/cc2NGvS0.s:93     .text:0000000000000094 $t
-     /tmp/cc2NGvS0.s:98     .text:0000000000000094 SystemInitError
+     /tmp/cckjiXh1.s:16     .text:0000000000000000 $t
+     /tmp/cckjiXh1.s:21     .text:0000000000000000 SystemInit
+     /tmp/cckjiXh1.s:88     .text:0000000000000084 $d
+     /tmp/cckjiXh1.s:93     .text:0000000000000094 $t
+     /tmp/cckjiXh1.s:98     .text:0000000000000094 SystemInitError
+     /tmp/cckjiXh1.s:112    .rodata:0000000000000000 APBPrescTable
+     /tmp/cckjiXh1.s:123    .rodata:0000000000000008 AHBPrescTable
+     /tmp/cckjiXh1.s:144    .data:0000000000000000 SystemCoreClock
+     /tmp/cckjiXh1.s:141    .data:0000000000000000 $d
 
 NO UNDEFINED SYMBOLS
