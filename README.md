@@ -19,7 +19,10 @@ It works for Transmission of the  data from the USART2
 
 Example:- 
 
-   void USART_Config()
+
+
+
+void USART_Config()
 { 
 	usart2.Instance 				= 		USART2;												// Using USART2
 	usart2.init.Data_Word_length 	= 		DATA_WORD_8_BIT;									// DATA_WORD_8_BIT only supported		
@@ -51,6 +54,6 @@ Example:-
 
 ----------------------------------------------------------------------------------
 
-for more information look into "main.c" and "stm_uart.h" file
+for more information look into "main.c" and "stm_uart.h" files
 
 
